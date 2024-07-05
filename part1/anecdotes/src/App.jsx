@@ -15,33 +15,39 @@ const App = () => {
     "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.",
     "The only way to go fast, is to go well.",
   ];
-  const points = Array(8).fill(0);
-  const [selected, setSelected] = useState(0);
-  const [votes, setVotes] = useState(points);
+  const startVotes = Array(anecdotes.length).fill(0);
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(startVotes);
 
   const handleClick = () => {
     const random = Math.floor(Math.random() * anecdotes.length);
     setSelected(random);
   };
-  ///El primer voto de la primera anectoda no se suma al rreglo
 
-  const handleClickVote = () => {
-    const copy = { ...votes };
-    console.log(copy[selected])
-    copy[selected] += 1;
-    setVotes(copy);
-    console.log(votes);
+  const handleVote = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
   };
+  
+  const maxVotesIndex = votes.indexOf(Math.max(...votes))
 
   return (
     <div>
       <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
-      <Button handleClick={handleClickVote} text={"Vote"}></Button>
+      <p>has {votes[selected]} vote(s)</p>
+      <Button handleClick={handleVote} text={"Vote"}></Button>
       <Button handleClick={handleClick} text={"Next anecdote"}></Button>
-      <h1>Anecdote with most votes</h1>
-      <p></p>
+      {votes[maxVotesIndex] === 0 ? (
+        <div></div>
+      ):(
+        <div>
+           <h1>Anecdote with most votes</h1>
+          <p>{anecdotes[maxVotesIndex]}</p>
+          <p>has {votes[maxVotesIndex]} votes(s)</p>
+        </div>
+      )}
     </div>
   );
 };
